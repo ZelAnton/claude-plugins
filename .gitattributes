@@ -1,0 +1,8 @@
+# Normalize all text files to LF on checkout, regardless of core.autocrlf.
+# Without this, Windows checkouts get CRLF on disk while git stores LF blobs,
+# which makes colocated `jj` see every file as modified.
+* text=auto eol=lf
+
+# Shell scripts must always be LF — required for `#!/usr/bin/env bash`
+# to work on Unix.
+*.sh text eol=lf
