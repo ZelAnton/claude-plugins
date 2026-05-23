@@ -1,6 +1,6 @@
 {
   "name": "vcs-workflow",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Per-prompt version-control workflow reminder for Claude Code agents. Detects the repo type (jj-colocated, pure-jj, or pure-git) and injects a matching scope-classification + push-to-active-branch decision tree before every edit, so the agent describes changes early, keeps orthogonal work apart, and pushes to the active branch's upstream instead of defaulting to main.",
   "author": {
     "name": "ZelAnton",

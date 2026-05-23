@@ -8,8 +8,14 @@
     {
       "name": "vcs-workflow",
       "source": "./vcs-workflow",
-      "description": "Per-prompt version-control workflow reminder. Detects the repo type (jj-colocated, pure-jj, or pure-git) and injects a matching scope-classification + push-to-active-branch decision tree via UserPromptSubmit hook.",
-      "version": "0.3.0"
+      "description": "Per-prompt version-control workflow reminder for Claude Code (and Copilot/Factory). Detects the repo type (jj-colocated, pure-jj, or pure-git) and injects a scope-classification + push-to-active-branch decision tree via UserPromptSubmit hook. For other clients install vcs-workflow-skill instead.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "vcs-workflow-skill",
+      "source": "./vcs-workflow-skill",
+      "description": "Portable, hook-free skill version of vcs-workflow for AI clients without per-prompt hooks (Cursor, Codex, Gemini, Windsurf, Cline, etc.). Same scope-classification + push-to-active-branch checklist, loaded once at session start. Install via allagents.",
+      "version": "0.1.0"
     }
   ]
 }

@@ -13,20 +13,28 @@ Two manifests govern everything; they must stay in sync:
 - [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) — top-level marketplace manifest. Lists each plugin with `name`, `source` (relative path), `description`, `version`. Adding a plugin requires a new entry here.
 - `<plugin-name>/.claude-plugin/plugin.json` — per-plugin manifest. Declares `hooks`, `skills`, `commands`, etc. The `name` and `version` here should match the marketplace entry.
 
-Each plugin lives in its own top-level directory (e.g. [`vcs-workflow/`](vcs-workflow/)) with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`; portable skills go under `<plugin>/skills/<skill-name>/SKILL.md`.
+Each plugin lives in its own top-level directory with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`; portable skills go under `<plugin>/skills/<skill-name>/SKILL.md`.
 
-## Multi-client distribution via allagents
+## Two-plugin split for cross-client distribution
 
-The repo is consumed by two CLIs, not just Claude Code:
+The `vcs-workflow` capability is deliberately split into two sibling plugins because there's no plugin-side way to route artifacts per client:
 
-- **Claude Code** reads `.claude-plugin/marketplace.json` directly (`/plugin marketplace add …`).
-- **[allagents](https://allagents.dev)** (`npx allagents plugin marketplace add …`) reads the *exact same* `.claude-plugin/marketplace.json` and syncs plugin artifacts to ~23 AI clients (Cursor, Codex, Gemini, Copilot, Windsurf, Cline, …). It looks up `<plugin>/skills/<skill>/SKILL.md` for portable instructions and `<plugin>/hooks/` for hook-capable clients (Claude/Copilot/Factory).
+- [`vcs-workflow/`](vcs-workflow/) — **hook only**. Targets Claude Code, GitHub Copilot, Factory (the three clients with per-prompt hook contracts).
+- [`vcs-workflow-skill/`](vcs-workflow-skill/) — **skill only**. Targets the remaining ~20 [allagents](https://allagents.dev)-supported clients (Cursor, Codex, Gemini, Windsurf, Cline, OpenCode, …) where only `skills/` loads.
 
-Practical consequences when editing plugins:
+Why split and not co-ship: a single plugin with both `hooks/` and `skills/` causes duplication on Claude/Copilot/Factory — those clients auto-discover both, so the same reminder is delivered twice (once per prompt via the hook, once at session start via the skill). [Claude Code's plugin manifest has no opt-out](https://code.claude.com/docs/en/plugins-reference.md) for skill auto-discovery, and allagents' per-client routing is configured user-side in `workspace.yaml`, not plugin-side. Splitting into two plugins is the only way for the plugin author to ship clean per-client behaviour.
 
-- Hooks are first-class on Claude/Copilot/Factory only; on the other ~20 clients only the `skills/` layer fires. Keep the SKILL.md in sync with the hook's reminder text so behaviour matches across clients.
+Practical consequences when editing:
+
+- **The hook reminder text** lives under `vcs-workflow/hooks/reminder-*.txt`.
+- **The skill body** lives under `vcs-workflow-skill/skills/vcs-workflow/SKILL.md`.
+- **Keep them semantically in sync.** Both encode the same continuation / scope-shift / new-work + push-to-active-branch checklist; if one is edited, mirror the substantive change in the other.
 - `SKILL.md` requires YAML frontmatter with `name` (≤128 chars) and `description` (required). The description is the trigger — it must say *when* the skill applies.
-- Don't drop the `hooks/` layer in favour of skills-only: hooks fire per-prompt; skills load once at session start. The whole point of `vcs-workflow` is per-prompt re-injection — the skill is a fallback, not a replacement.
+
+## Two consumers of `.claude-plugin/marketplace.json`
+
+- **Claude Code** reads `marketplace.json` directly (`/plugin marketplace add …`). Users install `vcs-workflow` here.
+- **[allagents](https://allagents.dev)** (`npx allagents plugin marketplace add …`) reads the *exact same* `marketplace.json` and syncs each plugin's artifacts to its target clients' paths. Users install `vcs-workflow` (Copilot/Factory) or `vcs-workflow-skill` (everyone else).
 
 ## Hook authoring conventions
 

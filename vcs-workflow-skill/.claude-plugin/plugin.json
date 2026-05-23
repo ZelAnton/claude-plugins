@@ -1,0 +1,9 @@
+{
+  "name": "vcs-workflow-skill",
+  "version": "0.1.0",
+  "description": "Portable version-control workflow skill for AI coding agents on clients without a per-prompt hook (Cursor, Codex, Gemini, Windsurf, Cline, etc.). Loads once at session start with a checklist for evaluating change scope and pushing to the active branch's own upstream. For Claude Code, install the per-prompt `vcs-workflow` plugin instead — it re-injects the same checklist every turn.",
+  "author": {
+    "name": "ZelAnton",
+    "url": "https://github.com/ZelAnton"
+  }
+}
