@@ -2,6 +2,8 @@
 
 Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-agent coding workflows.
 
+![Cover](cover.png)
+
 ## Plugins
 
 | Plugin | Purpose |
