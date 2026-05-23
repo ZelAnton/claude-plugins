@@ -13,7 +13,20 @@ Two manifests govern everything; they must stay in sync:
 - [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) — top-level marketplace manifest. Lists each plugin with `name`, `source` (relative path), `description`, `version`. Adding a plugin requires a new entry here.
 - `<plugin-name>/.claude-plugin/plugin.json` — per-plugin manifest. Declares `hooks`, `skills`, `commands`, etc. The `name` and `version` here should match the marketplace entry.
 
-Each plugin lives in its own top-level directory (e.g. [`vcs-workflow/`](vcs-workflow/)) with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`.
+Each plugin lives in its own top-level directory (e.g. [`vcs-workflow/`](vcs-workflow/)) with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`; portable skills go under `<plugin>/skills/<skill-name>/SKILL.md`.
+
+## Multi-client distribution via allagents
+
+The repo is consumed by two CLIs, not just Claude Code:
+
+- **Claude Code** reads `.claude-plugin/marketplace.json` directly (`/plugin marketplace add …`).
+- **[allagents](https://allagents.dev)** (`npx allagents plugin marketplace add …`) reads the *exact same* `.claude-plugin/marketplace.json` and syncs plugin artifacts to ~23 AI clients (Cursor, Codex, Gemini, Copilot, Windsurf, Cline, …). It looks up `<plugin>/skills/<skill>/SKILL.md` for portable instructions and `<plugin>/hooks/` for hook-capable clients (Claude/Copilot/Factory).
+
+Practical consequences when editing plugins:
+
+- Hooks are first-class on Claude/Copilot/Factory only; on the other ~20 clients only the `skills/` layer fires. Keep the SKILL.md in sync with the hook's reminder text so behaviour matches across clients.
+- `SKILL.md` requires YAML frontmatter with `name` (≤128 chars) and `description` (required). The description is the trigger — it must say *when* the skill applies.
+- Don't drop the `hooks/` layer in favour of skills-only: hooks fire per-prompt; skills load once at session start. The whole point of `vcs-workflow` is per-prompt re-injection — the skill is a fallback, not a replacement.
 
 ## Hook authoring conventions
 

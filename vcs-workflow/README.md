@@ -34,12 +34,25 @@ The git dialect maps the jj concepts to branches/commits; the colocated dialect 
 
 ## Install
 
+### Claude Code (recommended — full per-prompt hook)
+
 ```text
 /plugin marketplace add zelanton/claude-plugins
 /plugin install vcs-workflow@zelanton-claude-plugins
 ```
 
-After install the hook runs automatically on every user prompt — no per-project configuration.
+The hook runs automatically on every user prompt — no per-project configuration.
+
+### Other clients via [allagents](https://allagents.dev) — Cursor, Codex, Gemini, Copilot, Windsurf, Cline, etc.
+
+```bash
+npx allagents plugin marketplace add zelanton/claude-plugins --name zelanton
+npx allagents plugin install vcs-workflow@zelanton
+```
+
+allagents syncs the plugin to 23 AI clients from the same `.claude-plugin/marketplace.json`. On clients with hook support (Claude, Copilot, Factory) the per-prompt hook is wired up; on the remaining clients only the portable [`skills/vcs-workflow/SKILL.md`](./skills/vcs-workflow/SKILL.md) is installed — same checklist, but loaded once at session start instead of per-prompt.
+
+> **Trade-off.** The hook is the reason this plugin exists (CLAUDE.md prose decays across turns; a hook re-injects on every turn). Where hooks aren't available, the skill is the next-best thing — re-read it at the top of each new request.
 
 ## Requirements
 

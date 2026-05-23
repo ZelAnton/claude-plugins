@@ -1,6 +1,6 @@
 # claude-plugins
 
-Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-agent coding workflows.
+Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-agent coding workflows. Also installable into ~20 other AI clients (Cursor, Codex, Gemini, Copilot, Windsurf, Cline, …) via [allagents](https://allagents.dev).
 
 ![Cover](cover.png)
 
@@ -12,7 +12,7 @@ Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-age
 
 ## Install (for users)
 
-Add this marketplace to your Claude Code, then install plugins from it:
+### Claude Code
 
 ```text
 /plugin marketplace add zelanton/claude-plugins
@@ -21,13 +21,23 @@ Add this marketplace to your Claude Code, then install plugins from it:
 
 Plugins activate immediately. Updates land via `/plugin update`.
 
+### Other clients via [allagents](https://allagents.dev)
+
+```bash
+npx allagents plugin marketplace add zelanton/claude-plugins --name zelanton
+npx allagents plugin install vcs-workflow@zelanton
+```
+
+allagents reads the same `.claude-plugin/marketplace.json` and syncs plugin artifacts (hooks, skills, commands, MCP configs) to ~23 AI clients. On clients without hook support it falls back to the portable `SKILL.md` shipped under each plugin's `skills/` directory.
+
 ## Layout
 
 ```
 .claude-plugin/marketplace.json   Marketplace manifest (lists all plugins)
 <plugin-name>/                    One directory per plugin
   ├── .claude-plugin/plugin.json  Plugin manifest (hooks, skills, commands…)
-  ├── hooks/                      Hook scripts (when used)
+  ├── hooks/                      Hook scripts (Claude/Copilot/Factory)
+  ├── skills/<skill>/SKILL.md     Portable skill — loads on all 23 clients
   └── README.md                   Plugin-specific docs
 ```
 
