@@ -13,7 +13,7 @@ Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-age
 Add this marketplace to your Claude Code, then install plugins from it:
 
 ```text
-/plugin marketplace add ZelAnton/claude-plugins
+/plugin marketplace add zelanton/claude-plugins
 /plugin install jj-workflow@zelanton-claude-plugins
 ```
 

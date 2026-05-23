@@ -28,7 +28,7 @@ The text is in [`hooks/jj-prompt-reminder.txt`](./hooks/jj-prompt-reminder.txt) 
 ## Install
 
 ```text
-/plugin marketplace add ZelAnton/claude-plugins
+/plugin marketplace add zelanton/claude-plugins
 /plugin install jj-workflow@zelanton-claude-plugins
 ```
 
