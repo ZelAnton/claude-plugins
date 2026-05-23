@@ -9,7 +9,7 @@
       "name": "jj-workflow",
       "source": "./jj-workflow",
       "description": "Per-prompt reminder to evaluate continuation vs scope-shift vs new work for jj-colocated repos. Injects a decision-tree checklist via UserPromptSubmit hook.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ]
 }

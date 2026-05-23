@@ -1,6 +1,6 @@
 {
   "name": "jj-workflow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Per-prompt jj workflow reminder for Claude Code agents working in jj-colocated repos. Injects a continuation / scope-shift / new-work decision tree before every edit so the agent describes changes early and doesn't conflate orthogonal tasks into one jj change.",
   "author": {
     "name": "ZelAnton",

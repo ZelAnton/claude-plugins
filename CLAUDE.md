@@ -32,3 +32,5 @@ Rolling-`main` by default; `/plugin update` pulls latest commits. Breaking chang
 ## This repo is itself a jj-colocated repo
 
 `.jj/` exists alongside `.git/`. The `jj-workflow` plugin's own reminder applies when working here: classify each prompt as continuation / scope-shift / new work and run `jj describe` / `jj new` accordingly before editing.
+
+When pushing, target the **active bookmark's upstream** — not `main` by default. The active bookmark is the nearest bookmark in `::@`; advance it (`jj bookmark move <name> --to @`) and push only it (`jj git push -b <name>`). Touch `main` only when `main` is itself the active bookmark.
