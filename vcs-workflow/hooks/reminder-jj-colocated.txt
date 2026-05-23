@@ -1,4 +1,4 @@
-[jj-workflow] New user prompt — before any edits, evaluate the change scope (and when pushing, the target bookmark):
+[vcs-workflow] New user prompt (jj-colocated repo) — before any edits, evaluate the change scope (and when pushing, the target bookmark):
 
 1. Run `jj st` to see the current change description.
 2. Classify this prompt:
@@ -10,3 +10,4 @@
    - The active bookmark is the nearest bookmark in `::@` (`jj log -r 'heads(::@ & bookmarks())' -T 'bookmarks'`) — the branch this work belongs to.
    - Advance it when ready (`jj bookmark move <name> --to @`) and push only it: `jj git push -b <name>` (goes to that bookmark's own upstream).
    - Touch `main` only if `main` itself is the active bookmark. If the work belongs on a feature branch, set/create that bookmark instead of advancing `main`.
+5. This repo is colocated: drive version control through `jj`, not raw `git`. Git writes (`git commit`/`checkout`/`reset`) can desync the jj working copy; if one is unavoidable, follow it with `jj git import`.

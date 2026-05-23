@@ -1,0 +1,11 @@
+[vcs-workflow] New user prompt (git repo) — before any edits, evaluate the change scope (and when pushing, the target branch):
+
+1. Run `git status` and `git branch --show-current` to see the working tree and current branch.
+2. Classify this prompt:
+   - **Continuation**: same topic as in-progress work → keep working on the current branch; group related changes into one logical commit.
+   - **Scope shift**: the goal of the current work has shifted → stay on the branch, but keep history coherent (reword the pending commit, or split unrelated edits into their own commit before committing).
+   - **New work**: orthogonal topic or different area → start a fresh branch off the base (`git switch -c <name> <base-branch>`) so unrelated work doesn't pile onto the current branch.
+3. If unclear which category this prompt falls in, ask the user before editing.
+4. Pushing — target the current branch's own upstream, never `main` by default:
+   - Push the branch you are on (`git push -u origin HEAD` the first time, then `git push`); it goes to that branch's upstream.
+   - Don't commit to or push `main` unless `main` is the branch you're working on and the user asked. If the work belongs on a feature branch, create one first (`git switch -c <name>`).

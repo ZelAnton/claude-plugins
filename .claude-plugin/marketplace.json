@@ -6,10 +6,10 @@
   },
   "plugins": [
     {
-      "name": "jj-workflow",
-      "source": "./jj-workflow",
-      "description": "Per-prompt reminder to evaluate continuation vs scope-shift vs new work for jj-colocated repos. Injects a decision-tree checklist via UserPromptSubmit hook.",
-      "version": "0.2.0"
+      "name": "vcs-workflow",
+      "source": "./vcs-workflow",
+      "description": "Per-prompt version-control workflow reminder. Detects the repo type (jj-colocated, pure-jj, or pure-git) and injects a matching scope-classification + push-to-active-branch decision tree via UserPromptSubmit hook.",
+      "version": "0.3.0"
     }
   ]
 }

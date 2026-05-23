@@ -6,7 +6,7 @@ Personal marketplace of [Claude Code](https://claude.ai/code) plugins for AI-age
 
 | Plugin | Purpose |
 |---|---|
-| [`jj-workflow`](./jj-workflow/) | Per-prompt reminder enforcing the `jj describe`-early / continuation / scope-shift / new-work decision tree. For agents working in jj-colocated repos. |
+| [`vcs-workflow`](./vcs-workflow/) | Per-prompt reminder enforcing the describe-early / continuation / scope-shift / new-work decision tree, plus push-to-active-branch hygiene. Detects and adapts to jj-colocated, pure-jj, and pure-git repos. |
 
 ## Install (for users)
 
@@ -14,7 +14,7 @@ Add this marketplace to your Claude Code, then install plugins from it:
 
 ```text
 /plugin marketplace add zelanton/claude-plugins
-/plugin install jj-workflow@zelanton-claude-plugins
+/plugin install vcs-workflow@zelanton-claude-plugins
 ```
 
 Plugins activate immediately. Updates land via `/plugin update`.

@@ -13,15 +13,15 @@ Two manifests govern everything; they must stay in sync:
 - [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) — top-level marketplace manifest. Lists each plugin with `name`, `source` (relative path), `description`, `version`. Adding a plugin requires a new entry here.
 - `<plugin-name>/.claude-plugin/plugin.json` — per-plugin manifest. Declares `hooks`, `skills`, `commands`, etc. The `name` and `version` here should match the marketplace entry.
 
-Each plugin lives in its own top-level directory (e.g. [`jj-workflow/`](jj-workflow/)) with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`.
+Each plugin lives in its own top-level directory (e.g. [`vcs-workflow/`](vcs-workflow/)) with its own `README.md` and `.claude-plugin/plugin.json`. Hook scripts go under `<plugin>/hooks/`.
 
 ## Hook authoring conventions
 
-Hooks in this repo follow patterns set by [`jj-workflow/hooks/jj-prompt-reminder.sh`](jj-workflow/hooks/jj-prompt-reminder.sh):
+Hooks in this repo follow patterns set by [`vcs-workflow/hooks/workflow-reminder.sh`](vcs-workflow/hooks/workflow-reminder.sh):
 
 - **Bash-only, cross-platform.** Hooks declare `"shell": "bash"` in `plugin.json` so they run under Git Bash on Windows. Don't reach for PowerShell or platform-specific tooling.
 - **`${CLAUDE_PLUGIN_ROOT}`** is the path to the installed plugin cache. Always invoke scripts as `bash ${CLAUDE_PLUGIN_ROOT}/hooks/<script>.sh` — never assume the user's CWD.
-- **Reminder text lives in a sibling `.txt` file**, not embedded in the shell script. The script reads, JSON-escapes, and emits a single line of `{"hookSpecificOutput":{"hookEventName":"<event>","additionalContext":"…"}}`. This separation lets the prose be edited without touching JSON escapes.
+- **Reminder text lives in sibling `.txt` file(s)**, not embedded in the shell script. `workflow-reminder.sh` detects the repo type (jj-colocated / pure-jj / pure-git) by walking up from `$PWD` for `.jj`/`.git`, picks the matching `reminder-*.txt`, JSON-escapes it, and emits a single line of `{"hookSpecificOutput":{"hookEventName":"<event>","additionalContext":"…"}}`. This separation lets the prose be edited without touching JSON escapes.
 - **Fail silently.** A missing or malformed text file must `exit 0`, not break the user's turn. Hooks have a 5s timeout configured.
 - **JSON escape order matters** in the `sed` pipeline: backslash first, then `"`, then `\t`/`\r`, then newlines via the multi-line label trick (`:a; N; $!ba; s/\n/\\n/g`). Don't reorder without testing CRLF-saved files.
 
@@ -31,6 +31,6 @@ Rolling-`main` by default; `/plugin update` pulls latest commits. Breaking chang
 
 ## This repo is itself a jj-colocated repo
 
-`.jj/` exists alongside `.git/`. The `jj-workflow` plugin's own reminder applies when working here: classify each prompt as continuation / scope-shift / new work and run `jj describe` / `jj new` accordingly before editing.
+`.jj/` exists alongside `.git/`. The `vcs-workflow` plugin's own reminder applies when working here: classify each prompt as continuation / scope-shift / new work and run `jj describe` / `jj new` accordingly before editing.
 
 When pushing, target the **active bookmark's upstream** — not `main` by default. The active bookmark is the nearest bookmark in `::@`; advance it (`jj bookmark move <name> --to @`) and push only it (`jj git push -b <name>`). Touch `main` only when `main` is itself the active bookmark.
